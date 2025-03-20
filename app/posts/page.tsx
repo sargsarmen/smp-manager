@@ -24,12 +24,12 @@ import {
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { MoreHorizontal, Plus, Trash2 } from "lucide-react"
+import { MoreHorizontal, Plus, Trash2, Calendar, Clock, Edit, Facebook, Twitter, Instagram, Linkedin } from "lucide-react"
 import { Shell } from "@/components/shell"
 import { usePosts } from "@/context/post-context"
 import { useState, useEffect } from "react"
 import { useToast } from "@/components/ui/use-toast"
+import { useMediaQuery } from "@/hooks/use-media-query"
 
 export default function PostsPage() {
   const { posts, deletePost } = usePosts()
@@ -39,6 +39,9 @@ export default function PostsPage() {
   const [postToDelete, setPostToDelete] = useState<string | null>(null)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const postsPerPage = 5
+
+  // Check if the screen is mobile
+  const isMobile = useMediaQuery("(max-width: 768px)")
 
   // Filter posts based on search query
   const filteredPosts = posts.filter((post) => {
@@ -112,6 +115,21 @@ export default function PostsPage() {
     setIsDeleteDialogOpen(false)
   }
 
+  // Get status badge variant
+  const getStatusBadgeVariant = (status: string) => {
+    return status === "Published" ? "default" : status === "Scheduled" ? "outline" : "secondary"
+  }
+
+  // Get engagement badge styling
+  const getEngagementBadgeStyle = (engagement?: string) => {
+    if (!engagement) return ""
+    return engagement === "High"
+      ? "border-green-500 text-green-500"
+      : engagement === "Medium"
+        ? "border-yellow-500 text-yellow-500"
+        : "border-red-500 text-red-500"
+  }
+
   return (
     <Shell>
       <div className="flex min-h-screen w-full flex-col">
@@ -121,7 +139,8 @@ export default function PostsPage() {
             <Link href="/posts/new">
               <Button type="button">
                 <Plus className="mr-2 h-4 w-4" />
-                Create Post
+                <span className="hidden sm:inline">Create Post</span>
+                <span className="sm:hidden">New</span>
               </Button>
             </Link>
           </div>
@@ -143,109 +162,161 @@ export default function PostsPage() {
                     />
                   </div>
                 </div>
-                <div className="rounded-md border">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Platform</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Engagement</TableHead>
-                        <TableHead className="w-[50px]"></TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {currentPosts.length > 0 ? (
-                        currentPosts.map((post) => (
-                          <TableRow key={post.id}>
-                            <TableCell className="font-medium">{post.title}</TableCell>
-                            <TableCell>
-                              <Badge
-                                variant={
-                                  post.status === "Published"
-                                    ? "default"
-                                    : post.status === "Scheduled"
-                                      ? "outline"
-                                      : "secondary"
-                                }
-                              >
-                                {post.status}
-                              </Badge>
-                            </TableCell>
-                            <TableCell>
-                              <div className="flex items-center gap-2">
-                                <Avatar className="h-6 w-6">
-                                  <AvatarImage src={`/placeholder.svg?height=24&width=24`} alt={post.platform} />
-                                  <AvatarFallback>{post.platform.substring(0, 2)}</AvatarFallback>
-                                </Avatar>
-                                {post.platform}
-                              </div>
-                            </TableCell>
-                            <TableCell>{post.date}</TableCell>
-                            <TableCell>
-                              {post.engagement !== "N/A" ? (
-                                <Badge
-                                  variant="outline"
-                                  className={
-                                    post.engagement === "High"
-                                      ? "border-green-500 text-green-500"
-                                      : post.engagement === "Medium"
-                                        ? "border-yellow-500 text-yellow-500"
-                                        : "border-red-500 text-red-500"
-                                  }
-                                >
-                                  {post.engagement}
-                                </Badge>
-                              ) : (
-                                "—"
-                              )}
-                            </TableCell>
-                            <TableCell>
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button type="button" variant="ghost" size="icon">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                    <span className="sr-only">Actions</span>
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                  <DropdownMenuItem asChild>
-                                    <Link href={`/posts/${post.id}/edit`} className="w-full">
-                                      Edit
-                                    </Link>
-                                  </DropdownMenuItem>
-                                  <DropdownMenuSeparator />
-                                  <DropdownMenuItem
-                                    className="text-destructive focus:text-destructive"
-                                    onClick={() => handleDeleteClick(post.id)}
-                                  >
-                                    Delete
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
+
+                {/* Desktop Table View */}
+                {!isMobile && (
+                  <div className="rounded-md border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Title</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead>Platform</TableHead>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Engagement</TableHead>
+                          <TableHead className="w-[50px]"></TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {currentPosts.length > 0 ? (
+                          currentPosts.map((post) => (
+                            <TableRow key={post.id}>
+                              <TableCell className="font-medium">{post.title}</TableCell>
+                              <TableCell>
+                                <Badge variant={getStatusBadgeVariant(post.status)}>{post.status}</Badge>
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex items-center gap-2">
+
+                                  {post.platform === "Facebook" && <Facebook height={24} width={24} />}
+                                  {post.platform === "LinkedIn" && <Linkedin height={24} width={24} />}
+                                  {post.platform === "Twitter" && <Twitter height={24} width={24} />}
+                                  {post.platform === "Instagram" && <Instagram height={24} width={24} />}
+
+                                  {post.platform}
+                                </div>
+                              </TableCell>
+                              <TableCell>{post.date}</TableCell>
+                              <TableCell>
+                                {post.engagement !== "N/A" ? (
+                                  <Badge variant="outline" className={getEngagementBadgeStyle(post.engagement)}>
+                                    {post.engagement}
+                                  </Badge>
+                                ) : (
+                                  "—"
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button type="button" variant="ghost" size="icon">
+                                      <MoreHorizontal className="h-4 w-4" />
+                                      <span className="sr-only">Actions</span>
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                    <DropdownMenuItem asChild>
+                                      <Link href={`/posts/${post.id}/edit`} className="w-full">
+                                        Edit
+                                      </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                      className="text-destructive focus:text-destructive"
+                                      onClick={() => handleDeleteClick(post.id)}
+                                    >
+                                      Delete
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        ) : (
+                          <TableRow>
+                            <TableCell colSpan={6} className="h-24 text-center">
+                              No posts found matching your search.
                             </TableCell>
                           </TableRow>
-                        ))
-                      ) : (
-                        <TableRow>
-                          <TableCell colSpan={6} className="h-24 text-center">
-                            No posts found matching your search.
-                          </TableCell>
-                        </TableRow>
-                      )}
-                    </TableBody>
-                  </Table>
-                </div>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+
+                {/* Mobile Card View */}
+                {isMobile && (
+                  <div className="space-y-4">
+                    {currentPosts.length > 0 ? (
+                      currentPosts.map((post) => (
+                        <Card key={post.id} className="overflow-hidden">
+                          <div className="p-4">
+                            <div className="flex items-center justify-between">
+                              <h3 className="font-medium truncate">{post.title}</h3>
+                              <Badge variant={getStatusBadgeVariant(post.status)}>{post.status}</Badge>
+                            </div>
+
+                            <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                              {post.platform === "Facebook" && <Facebook height={24} width={24} />}
+                              {post.platform === "LinkedIn" && <Linkedin height={24} width={24} />}
+                              {post.platform === "Twitter" && <Twitter height={24} width={24} />}
+                              {post.platform === "Instagram" && <Instagram height={24} width={24} />}
+                              <span>{post.platform}</span>
+                            </div>
+
+                            <div className="mt-2 flex flex-wrap gap-3 text-xs">
+                              <div className="flex items-center">
+                                <Calendar className="mr-1 h-3.5 w-3.5 text-muted-foreground" />
+                                <span>{post.date}</span>
+                              </div>
+                              {post.time && (
+                                <div className="flex items-center">
+                                  <Clock className="mr-1 h-3.5 w-3.5 text-muted-foreground" />
+                                  <span>{post.time}</span>
+                                </div>
+                              )}
+                              {post.engagement !== "N/A" && (
+                                <Badge variant="outline" className={getEngagementBadgeStyle(post.engagement)}>
+                                  {post.engagement}
+                                </Badge>
+                              )}
+                            </div>
+
+                            <div className="mt-3 flex justify-end gap-2">
+                              <Link href={`/posts/${post.id}/edit`}>
+                                <Button type="button" variant="outline" size="sm" className="h-8 px-2">
+                                  <Edit className="h-3.5 w-3.5 mr-1" />
+                                  Edit
+                                </Button>
+                              </Link>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 px-2 text-destructive hover:bg-destructive/10"
+                                onClick={() => handleDeleteClick(post.id)}
+                              >
+                                <Trash2 className="h-3.5 w-3.5 mr-1" />
+                                Delete
+                              </Button>
+                            </div>
+                          </div>
+                        </Card>
+                      ))
+                    ) : (
+                      <div className="py-8 text-center text-muted-foreground">No posts found matching your search.</div>
+                    )}
+                  </div>
+                )}
               </CardContent>
-              <CardFooter className="flex items-center justify-between">
-                <p className="text-sm text-muted-foreground">
+              <CardFooter className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p className="text-sm text-muted-foreground order-2 sm:order-1">
                   {filteredPosts.length > 0
                     ? `Showing ${indexOfFirstPost + 1}-${Math.min(indexOfLastPost, filteredPosts.length)} of ${filteredPosts.length} posts`
                     : "No posts found"}
                 </p>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 order-1 sm:order-2 w-full sm:w-auto justify-center">
                   <Button type="button" variant="outline" size="sm" onClick={goToPrevPage} disabled={currentPage === 1}>
                     Previous
                   </Button>
@@ -277,7 +348,7 @@ export default function PostsPage() {
               This action cannot be undone. This will permanently delete the post from your account.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
+          <AlertDialogFooter className="flex-col sm:flex-row gap-2">
             <AlertDialogCancel onClick={cancelDelete}>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}
