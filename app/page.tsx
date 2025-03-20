@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { MoreHorizontal, Plus, Trash2, Calendar, Clock, Edit } from "lucide-react"
+import { MoreHorizontal, Plus, Trash2, Calendar, Clock, Edit, Facebook, Twitter, Instagram, Linkedin } from "lucide-react"
 import { Shell } from "@/components/shell"
 import { usePosts } from "@/context/post-context"
 import { useState, useEffect } from "react"
@@ -188,10 +188,12 @@ export default function PostsPage() {
                               </TableCell>
                               <TableCell>
                                 <div className="flex items-center gap-2">
-                                  <Avatar className="h-6 w-6">
-                                    <AvatarImage src={`/placeholder.svg?height=24&width=24`} alt={post.platform} />
-                                    <AvatarFallback>{post.platform.substring(0, 2)}</AvatarFallback>
-                                  </Avatar>
+
+                                  {post.platform === "Facebook" && <Facebook height={24} width={24} />}
+                                  {post.platform === "LinkedIn" && <Linkedin height={24} width={24} />}
+                                  {post.platform === "Twitter" && <Twitter height={24} width={24} />}
+                                  {post.platform === "Instagram" && <Instagram height={24} width={24} />}
+
                                   {post.platform}
                                 </div>
                               </TableCell>
@@ -257,10 +259,10 @@ export default function PostsPage() {
                             </div>
 
                             <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                              <Avatar className="h-5 w-5">
-                                <AvatarImage src={`/placeholder.svg?height=20&width=20`} alt={post.platform} />
-                                <AvatarFallback>{post.platform.substring(0, 2)}</AvatarFallback>
-                              </Avatar>
+                              {post.platform === "Facebook" && <Facebook height={24} width={24} />}
+                              {post.platform === "LinkedIn" && <Linkedin height={24} width={24} />}
+                              {post.platform === "Twitter" && <Twitter height={24} width={24} />}
+                              {post.platform === "Instagram" && <Instagram height={24} width={24} />}
                               <span>{post.platform}</span>
                             </div>
 
