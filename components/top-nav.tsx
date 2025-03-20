@@ -1,0 +1,31 @@
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Menu } from "lucide-react"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { SideNav } from "@/components/side-nav"
+
+export function TopNav() {
+  return (
+    <header className="sticky top-0 z-50 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="outline" size="icon" className="md:hidden">
+            <Menu className="h-5 w-5" />
+            <span className="sr-only">Toggle navigation menu</span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-72">
+          <div className="grid gap-4 py-4">
+            <SideNav />
+          </div>
+        </SheetContent>
+      </Sheet>
+      <div className="flex-1">
+        <Link href="/" className="flex items-center gap-2 font-semibold">
+          <span className="text-lg font-bold md:text-xl">SMP Manager</span>
+        </Link>
+      </div>
+    </header>
+  )
+}
+
