@@ -5,16 +5,30 @@ import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, isPast, p
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { CalendarIcon, ChevronLeft, ChevronRight, Plus } from "lucide-react"
+import { CalendarIcon, ChevronLeft, ChevronRight, Plus, Trash2 } from "lucide-react"
 import Link from "next/link"
 import { Shell } from "@/components/shell"
 import { usePosts } from "@/context/post-context"
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function ScheduleClientPage() {
-  const { posts } = usePosts()
+  const { posts, deletePost } = usePosts()
+  const { toast } = useToast()
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date())
+  const [postToDelete, setPostToDelete] = useState<string | null>(null)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
   // Filter only scheduled posts
   const scheduledPosts = useMemo(() => posts.filter((post) => post.status === "Scheduled"), [posts])
@@ -38,6 +52,36 @@ export default function ScheduleClientPage() {
     const nextMonthDate = new Date(currentMonth)
     nextMonthDate.setMonth(nextMonthDate.getMonth() + 1)
     setCurrentMonth(nextMonthDate)
+  }
+
+  // Handle post deletion
+  const handleCancelClick = (postId: string) => {
+    setPostToDelete(postId)
+    setIsDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = () => {
+    if (postToDelete) {
+      // Close dialog first to prevent UI freeze
+      setIsDeleteDialogOpen(false)
+
+      // Delete the post
+      deletePost(postToDelete)
+
+      // Show success toast
+      toast({
+        title: "Post cancelled",
+        description: "The scheduled post has been successfully cancelled.",
+      })
+
+      // Reset state
+      setPostToDelete(null)
+    }
+  }
+
+  const cancelDelete = () => {
+    setPostToDelete(null)
+    setIsDeleteDialogOpen(false)
   }
 
   // Get posts for a specific day
@@ -191,7 +235,13 @@ export default function ScheduleClientPage() {
                                       Edit
                                     </Button>
                                   </Link>
-                                  <Button type="button" variant="ghost" size="sm">
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleCancelClick(post.id)}
+                                    className="text-destructive hover:bg-destructive/10"
+                                  >
                                     Cancel
                                   </Button>
                                 </div>
@@ -225,6 +275,28 @@ export default function ScheduleClientPage() {
           </Card>
         </main>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure you want to cancel this post?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently remove the scheduled post from your calendar.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={cancelDelete}>Keep Post</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Cancel Post
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Shell>
   )
 }

@@ -93,7 +93,7 @@ export default function EditPostPage() {
               // If it's in yyyy-MM-dd format
               parsedDate = new Date(foundPost.date)
             } else {
-              // If it's in "Apr 23, 2023" format
+              // If it's in "Apr 23, 2025" format
               parsedDate = new Date(foundPost.date)
             }
 

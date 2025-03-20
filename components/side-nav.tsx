@@ -6,6 +6,10 @@ import { Button } from "@/components/ui/button"
 import { LayoutDashboard, FileText, CalendarDays, BarChart3 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
+interface SideNavProps {
+  isMobile?: boolean
+}
+
 const sidebarNavItems = [
   {
     title: "Dashboard",
@@ -29,11 +33,11 @@ const sidebarNavItems = [
   },
 ]
 
-export function SideNav() {
+export function SideNav({ isMobile = false }: SideNavProps) {
   const pathname = usePathname()
 
   return (
-    <div className="hidden border-r bg-background md:block">
+    <div className={cn("border-r bg-background", isMobile ? "border-0" : "hidden md:block")}>
       <div className="flex h-full flex-col p-4">
         <nav className="grid gap-1 pt-4">
           {sidebarNavItems.map((item, index) => {
@@ -43,7 +47,11 @@ export function SideNav() {
                 <Button
                   type="button"
                   variant="ghost"
-                  className={cn("justify-start w-full", isActive && "bg-primary text-primary-foreground")}
+                  className={cn(
+                    "justify-start w-full",
+                    isActive && "bg-primary text-primary-foreground",
+                    isMobile && "h-12 text-base",
+                  )}
                 >
                   <item.icon className="mr-2 h-4 w-4" />
                   <span>{item.title}</span>

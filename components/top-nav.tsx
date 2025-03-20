@@ -15,8 +15,11 @@ export function TopNav() {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="w-72">
-          <div className="grid gap-4 py-4">
-            <SideNav />
+          <div className="mt-6 flex flex-col gap-4">
+            <div className="px-2 py-2">
+              <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">Navigation</h2>
+              <SideNav isMobile={true} />
+            </div>
           </div>
         </SheetContent>
       </Sheet>

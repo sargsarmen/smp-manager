@@ -85,7 +85,7 @@ export default function DashboardPage() {
                     <Overview />
                   </CardContent>
                 </Card>
-                <Card className="col-span-3 transition-all hover:shadow-md hover:border-primary/20">
+                <Card className="lg:col-span-3 col-span-4 transition-all hover:shadow-md hover:border-primary/20">
                   <CardHeader>
                     <CardTitle>Recent Activity</CardTitle>
                     <CardDescription>Your post performance in the last 7 days</CardDescription>

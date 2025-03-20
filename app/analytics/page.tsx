@@ -76,7 +76,7 @@ export default function AnalyticsPage() {
                     <EngagementChart />
                   </CardContent>
                 </Card>
-                <Card className="col-span-3 transition-all hover:shadow-md hover:border-primary/20">
+                <Card className="lg:col-span-3 col-span-4 transition-all hover:shadow-md hover:border-primary/20">
                   <CardHeader>
                     <CardTitle>Platform Breakdown</CardTitle>
                     <CardDescription>Engagement distribution by platform</CardDescription>
