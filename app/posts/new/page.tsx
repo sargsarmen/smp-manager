@@ -128,8 +128,8 @@ export default function NewPostPage() {
                       name="title"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>
-                            Post Title <span className="text-red-500">*</span>
+                          <FormLabel className="text-card-foreground">
+                            Post Title *
                           </FormLabel>
                           <FormControl>
                             <Input placeholder="Enter post title" {...field} />
@@ -143,8 +143,8 @@ export default function NewPostPage() {
                       name="content"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>
-                            Content <span className="text-red-500">*</span>
+                          <FormLabel className="text-card-foreground">
+                            Content <span>*</span>
                           </FormLabel>
                           <FormControl>
                             <Textarea
@@ -170,8 +170,8 @@ export default function NewPostPage() {
                       name="platform"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>
-                            Platform <span className="text-red-500">*</span>
+                          <FormLabel className="text-card-foreground">
+                            Platform *
                           </FormLabel>
                           <FormControl>
                             <Select onValueChange={field.onChange} value={field.value || "instagram"}>
@@ -195,8 +195,8 @@ export default function NewPostPage() {
                       name="status"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>
-                            Status <span className="text-red-500">*</span>
+                          <FormLabel className="text-card-foreground">
+                            Status *
                           </FormLabel>
                           <FormControl>
                             <Select onValueChange={field.onChange} value={field.value || "draft"}>
@@ -224,8 +224,8 @@ export default function NewPostPage() {
                       name="date"
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
-                          <FormLabel>
-                            Publish Date {status === "scheduled" && <span className="text-red-500">*</span>}
+                          <FormLabel className="text-card-foreground">
+                            Publish Date {status === "scheduled" && <span>*</span>}
                           </FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
@@ -263,8 +263,8 @@ export default function NewPostPage() {
                       name="time"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>
-                            Publish Time {status === "scheduled" && date && <span className="text-red-500">*</span>}
+                          <FormLabel className="text-card-foreground">
+                            Publish Time {status === "scheduled" && <span>*</span>}
                           </FormLabel>
                           <FormControl>
                             <Input type="time" disabled={status !== "scheduled"} {...field} />
