@@ -115,7 +115,7 @@ export default function NewPostPage() {
             <h1 className="text-3xl font-bold tracking-tight">Create New Post</h1>
           </div>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" noValidate>
               <div className="grid gap-6 md:grid-cols-2">
                 <Card className="md:col-span-1">
                   <CardHeader>
