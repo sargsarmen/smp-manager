@@ -24,15 +24,16 @@ import {
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { MoreHorizontal, Plus, Trash2, Calendar, Clock, Edit, Facebook, Twitter, Instagram, Linkedin } from "lucide-react"
+import { MoreHorizontal, Plus, Trash2, Calendar, Clock, Edit, Undo, Facebook, Twitter, Instagram, Linkedin } from "lucide-react"
 import { Shell } from "@/components/shell"
-import { usePosts } from "@/context/post-context"
+import { usePosts, type Post } from "@/context/post-context"
 import { useState, useEffect } from "react"
 import { useToast } from "@/components/ui/use-toast"
 import { useMediaQuery } from "@/hooks/use-media-query"
+import { ToastAction } from "@/components/ui/toast"
 
 export default function PostsPage() {
-  const { posts, deletePost } = usePosts()
+  const { posts, deletePost, restorePost } = usePosts()
   const { toast } = useToast()
   const [searchQuery, setSearchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
@@ -96,14 +97,22 @@ export default function PostsPage() {
       // Close dialog first to prevent UI freeze
       setIsDeleteDialogOpen(false)
 
-      // Delete the post
-      deletePost(postToDelete)
+      // Delete the post and get the deleted post for potential restoration
+      const deletedPost = deletePost(postToDelete)
 
-      // Show success toast
-      toast({
-        title: "Post deleted",
-        description: "The post has been successfully deleted.",
-      })
+      if (deletedPost) {
+        // Show success toast with undo option
+        toast({
+          title: "Post deleted",
+          description: `"${deletedPost.title}" has been deleted.`,
+          action: (
+            <ToastAction altText="Undo" onClick={() => handleUndoDelete(deletedPost)} className="gap-1">
+              <Undo className="h-4 w-4" />
+              Undo
+            </ToastAction>
+          ),
+        })
+      }
 
       // Reset state
       setPostToDelete(null)
@@ -113,6 +122,16 @@ export default function PostsPage() {
   const cancelDelete = () => {
     setPostToDelete(null)
     setIsDeleteDialogOpen(false)
+  }
+
+  // Handle undo delete
+  const handleUndoDelete = (post: Post) => {
+    restorePost(post)
+
+    toast({
+      title: "Post restored",
+      description: `"${post.title}" has been restored.`,
+    })
   }
 
   // Get status badge variant
@@ -345,7 +364,7 @@ export default function PostsPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure you want to delete this post?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the post from your account.
+              This action can be undone. You will be able to restore the post after deletion.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex-col sm:flex-row gap-2">

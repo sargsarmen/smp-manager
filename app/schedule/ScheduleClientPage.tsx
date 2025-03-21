@@ -5,10 +5,10 @@ import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, isPast, p
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { CalendarIcon, ChevronLeft, ChevronRight, Plus, Trash2 } from "lucide-react"
+import { CalendarIcon, ChevronLeft, ChevronRight, Plus, Trash2, Undo } from "lucide-react"
 import Link from "next/link"
 import { Shell } from "@/components/shell"
-import { usePosts } from "@/context/post-context"
+import { usePosts, type Post } from "@/context/post-context"
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import {
@@ -22,9 +22,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { useToast } from "@/components/ui/use-toast"
+import { ToastAction } from "@/components/ui/toast"
 
 export default function ScheduleClientPage() {
-  const { posts, deletePost } = usePosts()
+  const { posts, deletePost, restorePost } = usePosts()
   const { toast } = useToast()
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date())
   const [postToDelete, setPostToDelete] = useState<string | null>(null)
@@ -65,14 +66,22 @@ export default function ScheduleClientPage() {
       // Close dialog first to prevent UI freeze
       setIsDeleteDialogOpen(false)
 
-      // Delete the post
-      deletePost(postToDelete)
+      // Delete the post and get the deleted post for potential restoration
+      const deletedPost = deletePost(postToDelete)
 
-      // Show success toast
-      toast({
-        title: "Post cancelled",
-        description: "The scheduled post has been successfully cancelled.",
-      })
+      if (deletedPost) {
+        // Show success toast with undo option
+        toast({
+          title: "Post cancelled",
+          description: `"${deletedPost.title}" has been cancelled.`,
+          action: (
+            <ToastAction altText="Undo" onClick={() => handleUndoDelete(deletedPost)} className="gap-1">
+              <Undo className="h-4 w-4" />
+              Undo
+            </ToastAction>
+          ),
+        })
+      }
 
       // Reset state
       setPostToDelete(null)
@@ -82,6 +91,16 @@ export default function ScheduleClientPage() {
   const cancelDelete = () => {
     setPostToDelete(null)
     setIsDeleteDialogOpen(false)
+  }
+
+  // Handle undo delete
+  const handleUndoDelete = (post: Post) => {
+    restorePost(post)
+
+    toast({
+      title: "Post restored",
+      description: `"${post.title}" has been restored to the schedule.`,
+    })
   }
 
   // Get posts for a specific day
@@ -282,10 +301,10 @@ export default function ScheduleClientPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure you want to cancel this post?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently remove the scheduled post from your calendar.
+              This action can be undone. You will be able to restore the post after cancellation.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
+          <AlertDialogFooter className="flex-col sm:flex-row gap-2">
             <AlertDialogCancel onClick={cancelDelete}>Keep Post</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}

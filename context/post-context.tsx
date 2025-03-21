@@ -104,7 +104,8 @@ type PostContextType = {
   getPost: (id: string) => Post | undefined
   updatePost: (updatedPost: Post) => void
   addPost: (post: Post) => void
-  deletePost: (id: string) => void
+  deletePost: (id: string) => Post | undefined
+  restorePost: (post: Post) => void
 }
 
 // Create the context
@@ -129,13 +130,27 @@ export function PostProvider({ children }: { children: ReactNode }) {
     setPosts((prevPosts) => [...prevPosts, post])
   }
 
-  // Delete a post
+  // Delete a post and return the deleted post for potential restoration
   const deletePost = (id: string) => {
-    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id))
+    let deletedPost: Post | undefined
+
+    setPosts((prevPosts) => {
+      deletedPost = prevPosts.find((post) => post.id === id)
+      return prevPosts.filter((post) => post.id !== id)
+    })
+
+    return deletedPost
+  }
+
+  // Restore a deleted post
+  const restorePost = (post: Post) => {
+    setPosts((prevPosts) => [...prevPosts, post])
   }
 
   return (
-    <PostContext.Provider value={{ posts, getPost, updatePost, addPost, deletePost }}>{children}</PostContext.Provider>
+    <PostContext.Provider value={{ posts, getPost, updatePost, addPost, deletePost, restorePost }}>
+      {children}
+    </PostContext.Provider>
   )
 }
 
