@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -26,6 +25,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 // Schema
 import { postFormSchemaWithSchedule, type PostFormValues } from "@/schemas/post-schema"
+import { Separator } from "@/components/ui/separator"
 
 export default function EditPostPage() {
   const router = useRouter()
@@ -176,172 +176,182 @@ export default function EditPostPage() {
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold tracking-tight">Edit Post</h1>
           </div>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" noValidate>
-              <div className="grid gap-6 md:grid-cols-2">
-                <Card className="md:col-span-1">
-                  <CardHeader>
-                    <CardTitle>Post Content</CardTitle>
-                    <CardDescription>Edit your post content and media.</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <FormField
-                      control={form.control}
-                      name="title"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-card-foreground">
-                            Post Title *
-                          </FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter post title" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="content"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-card-foreground">
-                            Content *
-                          </FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Write your post content here..."
-                              className="min-h-[150px]"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </CardContent>
-                </Card>
-                <Card className="md:col-span-1">
-                  <CardHeader>
-                    <CardTitle>Publishing Settings</CardTitle>
-                    <CardDescription>Configure when and where to publish your post.</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <FormField
-                      control={form.control}
-                      name="platform"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-card-foreground">
-                            Platform *
-                          </FormLabel>
-                          <FormControl>
-                            <Select onValueChange={field.onChange} value={field.value}>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select platform" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="instagram">Instagram</SelectItem>
-                                <SelectItem value="twitter">Twitter</SelectItem>
-                                <SelectItem value="facebook">Facebook</SelectItem>
-                                <SelectItem value="linkedin">LinkedIn</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="status"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-card-foreground">
-                            Status *
-                          </FormLabel>
-                          <FormControl>
-                            <Select onValueChange={field.onChange} value={field.value}>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select status" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="draft">Draft</SelectItem>
-                                <SelectItem value="scheduled">Scheduled</SelectItem>
-                                <SelectItem value="published">Published</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          {status !== "scheduled" && (
-                            <FormDescription>
-                              Date and time options are only available for scheduled posts.
-                            </FormDescription>
-                          )}
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="date"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col">
-                          <FormLabel className="text-card-foreground">
-                            Publish Date {status === "scheduled" && <span>*</span>}
-                          </FormLabel>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <FormControl>
-                                <Button
-                                  variant={"outline"}
-                                  className={cn(
-                                    "w-full justify-start text-left font-normal",
-                                    !field.value && "text-muted-foreground",
-                                  )}
-                                  disabled={status !== "scheduled"}
-                                  type="button"
-                                >
-                                  <CalendarIcon className="mr-2 h-4 w-4" />
-                                  {field.value ? format(field.value, "PPP") : "Select date"}
-                                </Button>
-                              </FormControl>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0" align="start">
-                              <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
-                            </PopoverContent>
-                          </Popover>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="time"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-card-foreground">
-                            Publish Time {status === "scheduled" && <span>*</span>}
-                          </FormLabel>
-                          <FormControl>
-                            <Input type="time" disabled={status !== "scheduled"} {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </CardContent>
-                  <CardFooter className="flex justify-between">
+          <Card>
+            <CardContent className="p-6">
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" noValidate>
+                  <div className="space-y-6">
+                    <div>
+                      <h2 className="text-xl font-semibold tracking-tight">Post Content</h2>
+                      <p className="text-sm text-muted-foreground">Create your post content and add media.</p>
+                    </div>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-card-foreground">
+                              Post Title *
+                            </FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter post title" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="content"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-card-foreground">
+                              Content <span>*</span>
+                            </FormLabel>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Write your post content here..."
+                                className="min-h-[150px]"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                  <Separator />
+                  <div className="space-y-6">
+                    <div>
+                      <h2 className="text-xl font-semibold tracking-tight">Publishing Settings</h2>
+                      <p className="text-sm text-muted-foreground">Configure when and where to publish your post.</p>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <FormField
+                        control={form.control}
+                        name="platform"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-card-foreground">
+                              Platform *
+                            </FormLabel>
+                            <FormControl>
+                              <Select onValueChange={field.onChange} value={field.value || "instagram"}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select platform" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="instagram">Instagram</SelectItem>
+                                  <SelectItem value="twitter">Twitter</SelectItem>
+                                  <SelectItem value="facebook">Facebook</SelectItem>
+                                  <SelectItem value="linkedin">LinkedIn</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="status"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-card-foreground">
+                              Status *
+                            </FormLabel>
+                            <FormControl>
+                              <Select onValueChange={field.onChange} value={field.value || "draft"}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="draft">Draft</SelectItem>
+                                  <SelectItem value="scheduled">Scheduled</SelectItem>
+                                  <SelectItem value="published">Published</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            {status !== "scheduled" && (
+                              <FormDescription>
+                                Date and time options are only available for scheduled posts.
+                              </FormDescription>
+                            )}
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="date"
+                        render={({ field }) => (
+                          <FormItem className="">
+                            <FormLabel className="text-card-foreground">
+                              Publish Date {status === "scheduled" && <span>*</span>}
+                            </FormLabel>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <FormControl>
+                                  <Button
+                                    type="button"
+                                    variant={"outline"}
+                                    className={cn(
+                                      "w-full justify-start text-left font-normal",
+                                      !field.value && "text-muted-foreground",
+                                    )}
+                                    disabled={status !== "scheduled"}
+                                  >
+                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    {field.value ? format(field.value, "PPP") : "Select date"}
+                                  </Button>
+                                </FormControl>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-auto p-0" align="start">
+                                <Calendar
+                                  mode="single"
+                                  selected={field.value}
+                                  onSelect={field.onChange}
+                                  disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                                  initialFocus
+                                />
+                              </PopoverContent>
+                            </Popover>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="time"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-card-foreground">
+                              Publish Time {status === "scheduled" && <span>*</span>}
+                            </FormLabel>
+                            <FormControl>
+                              <Input type="time" disabled={status !== "scheduled"} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-between pt-4">
                     <Button variant="outline" onClick={() => router.back()} type="button">
                       Cancel
                     </Button>
                     <Button type="submit" disabled={isSubmitting}>
-                      {isSubmitting ? "Saving..." : "Save Changes"}
+                      {isSubmitting ? "Saving..." : "Save Post"}
                     </Button>
-                  </CardFooter>
-                </Card>
-              </div>
-            </form>
-          </Form>
+                  </div>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
         </main>
       </div>
     </Shell>
