@@ -66,7 +66,7 @@ export function TopPosts() {
             <AvatarFallback>{post.platform.substring(0, 2)}</AvatarFallback>
           </Avatar>
           <div className="flex-1 space-y-1">
-            <div className="flex items-center justify-between">
+            <div className="flex items-baseline justify-between">
               <h3 className="font-medium">{post.title}</h3>
               <Badge variant="outline">{post.platform}</Badge>
             </div>

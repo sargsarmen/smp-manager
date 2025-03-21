@@ -64,7 +64,7 @@ export function RecentPosts() {
               <AvatarFallback>{post.platform.substring(0, 2)}</AvatarFallback>
             </Avatar>
             <div className="space-y-1">
-              <CardTitle>{post.title}</CardTitle>
+              <CardTitle className="text-sm sm:text-base md:text-lg lg:text-2xl truncate">{post.title}</CardTitle>
               <CardDescription>
                 {post.platform} • {post.date}
               </CardDescription>

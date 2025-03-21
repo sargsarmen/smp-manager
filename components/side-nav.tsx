@@ -49,7 +49,7 @@ export function SideNav({ isMobile = false }: SideNavProps) {
                   variant="ghost"
                   className={cn(
                     "justify-start w-full",
-                    isActive && "bg-primary text-primary-foreground",
+                    isActive && "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
                     isMobile && "h-12 text-base",
                   )}
                 >

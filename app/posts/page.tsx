@@ -272,7 +272,7 @@ export default function PostsPage() {
                         <Card key={post.id} className="overflow-hidden">
                           <div className="p-4">
                             <div className="flex items-center justify-between">
-                              <h3 className="font-medium truncate">{post.title}</h3>
+                              <h3 className="text-sm sm:text-base truncate">{post.title}</h3>
                               <Badge variant={getStatusBadgeVariant(post.status)}>{post.status}</Badge>
                             </div>
 

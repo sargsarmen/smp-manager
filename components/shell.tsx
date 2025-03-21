@@ -12,7 +12,7 @@ export function Shell({ children }: ShellProps) {
       <TopNav />
       <div className="flex flex-1">
         <SideNav />
-        <div className="flex-1">{children}</div>
+        <div className="flex-1 w-full">{children}</div>
       </div>
     </div>
   )
