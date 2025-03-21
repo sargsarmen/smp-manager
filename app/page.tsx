@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Users, MessageSquare, Heart, Share2 } from "lucide-react"
+import { Users, MessageSquare, Heart, Share2, Plus } from "lucide-react"
 import Link from "next/link"
 import { Overview } from "@/components/dashboard/overview"
 import { RecentPosts } from "@/components/dashboard/recent-posts"
@@ -22,9 +22,13 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
             <div className="flex items-center gap-2">
-              <Button asChild>
-                <Link href="/posts/new">Create New Post</Link>
-              </Button>
+              <Link href="/posts/new">
+                <Button type="button">
+                  <Plus className="h-4 w-4" />
+                  <span className="hidden sm:inline">Create Post</span>
+                  <span className="sm:hidden">New</span>
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

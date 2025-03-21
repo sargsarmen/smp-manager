@@ -157,7 +157,7 @@ export default function PostsPage() {
             <h1 className="text-3xl font-bold tracking-tight">Posts</h1>
             <Link href="/posts/new">
               <Button type="button">
-                <Plus className="mr-2 h-4 w-4" />
+                <Plus className="h-4 w-4" />
                 <span className="hidden sm:inline">Create Post</span>
                 <span className="sm:hidden">New</span>
               </Button>
