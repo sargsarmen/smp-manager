@@ -41,7 +41,7 @@ export function UpcomingPosts() {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
       {upcomingPosts.map((post) => (
-        <Card key={post.id} className="transition-all hover:shadow-md hover:border-primary/20 hover:-translate-y-1">
+        <Card key={post.id} className="transition-all hover:shadow-md hover:border-primary/20">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>{post.title}</CardTitle>

@@ -57,7 +57,7 @@ export function RecentPosts() {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
       {recentPosts.map((post) => (
-        <Card key={post.id} className="transition-all hover:shadow-md hover:border-primary/20 hover:-translate-y-1">
+        <Card key={post.id} className="transition-all hover:shadow-md hover:border-primary/20">
           <CardHeader className="flex flex-row items-start gap-4 space-y-0">
             <Avatar className="h-12 w-12 rounded-md">
               <AvatarImage src={post.image} alt={post.title} />

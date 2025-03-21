@@ -59,7 +59,7 @@ export function TopPosts() {
       {topPosts.map((post) => (
         <div
           key={post.id}
-          className="flex items-start gap-4 rounded-lg border p-4 transition-all hover:shadow-md hover:border-primary/20 hover:-translate-y-1"
+          className="flex items-start gap-4 rounded-lg border p-4 transition-all hover:shadow-md hover:border-primary/20"
         >
           <Avatar className="h-12 w-12 rounded-md">
             <AvatarImage src={post.image} alt={post.title} />

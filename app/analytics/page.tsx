@@ -29,7 +29,7 @@ export default function AnalyticsPage() {
             </TabsList>
             <TabsContent value="overview" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card className="transition-all hover:shadow-md hover:border-primary/20 hover:-translate-y-1">
+                <Card className="transition-all hover:shadow-md hover:border-primary/20">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Total Engagement</CardTitle>
                   </CardHeader>
@@ -38,7 +38,7 @@ export default function AnalyticsPage() {
                     <p className="text-xs text-muted-foreground">+18% from last month</p>
                   </CardContent>
                 </Card>
-                <Card className="transition-all hover:shadow-md hover:border-primary/20 hover:-translate-y-1">
+                <Card className="transition-all hover:shadow-md hover:border-primary/20">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Followers Growth</CardTitle>
                   </CardHeader>
@@ -47,7 +47,7 @@ export default function AnalyticsPage() {
                     <p className="text-xs text-muted-foreground">+10% from last month</p>
                   </CardContent>
                 </Card>
-                <Card className="transition-all hover:shadow-md hover:border-primary/20 hover:-translate-y-1">
+                <Card className="transition-all hover:shadow-md hover:border-primary/20">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Avg. Engagement Rate</CardTitle>
                   </CardHeader>
@@ -56,7 +56,7 @@ export default function AnalyticsPage() {
                     <p className="text-xs text-muted-foreground">+0.8% from last month</p>
                   </CardContent>
                 </Card>
-                <Card className="transition-all hover:shadow-md hover:border-primary/20 hover:-translate-y-1">
+                <Card className="transition-all hover:shadow-md hover:border-primary/20">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Top Platform</CardTitle>
                   </CardHeader>

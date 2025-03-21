@@ -28,7 +28,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <Card className="transition-all hover:shadow-md hover:border-primary/20 hover:-translate-y-1">
+            <Card className="transition-all hover:shadow-md hover:border-primary/20">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Posts</CardTitle>
                 <MessageSquare className="h-4 w-4 text-primary" />
@@ -38,7 +38,7 @@ export default function DashboardPage() {
                 <p className="text-xs text-muted-foreground">+22% from last month</p>
               </CardContent>
             </Card>
-            <Card className="transition-all hover:shadow-md hover:border-primary/20 hover:-translate-y-1">
+            <Card className="transition-all hover:shadow-md hover:border-primary/20">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Engagement</CardTitle>
                 <Heart className="h-4 w-4 text-primary" />
@@ -48,7 +48,7 @@ export default function DashboardPage() {
                 <p className="text-xs text-muted-foreground">+18% from last month</p>
               </CardContent>
             </Card>
-            <Card className="transition-all hover:shadow-md hover:border-primary/20 hover:-translate-y-1">
+            <Card className="transition-all hover:shadow-md hover:border-primary/20">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Followers</CardTitle>
                 <Users className="h-4 w-4 text-primary" />
@@ -58,7 +58,7 @@ export default function DashboardPage() {
                 <p className="text-xs text-muted-foreground">+10% from last month</p>
               </CardContent>
             </Card>
-            <Card className="transition-all hover:shadow-md hover:border-primary/20 hover:-translate-y-1">
+            <Card className="transition-all hover:shadow-md hover:border-primary/20">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Shares</CardTitle>
                 <Share2 className="h-4 w-4 text-primary" />
