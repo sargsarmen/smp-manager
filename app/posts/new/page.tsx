@@ -1,11 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { format, parse } from "date-fns"
-import { CalendarIcon, ImagePlus } from "lucide-react"
+import { CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 // UI Components
@@ -29,17 +29,9 @@ import { Separator } from "@/components/ui/separator"
 
 export default function NewPostPage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const { addPost } = usePosts()
   const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  // Get query parameters
-  const dateParam = searchParams ? searchParams.get("date") : null
-  const statusParam = searchParams?.get("status") as ("draft" | "scheduled" | "published" | undefined);
-
-  // Parse date from query parameter if available
-  const parsedDate = dateParam ? parse(dateParam, "yyyy-MM-dd", new Date()) : undefined
 
   // Initialize form with react-hook-form and zod validation
   const form = useForm<PostFormValues>({
@@ -48,8 +40,8 @@ export default function NewPostPage() {
       title: "",
       content: "",
       platform: "instagram", // Provide a default value
-      status: statusParam || "draft",
-      date: parsedDate,
+      status: "draft",
+      date: undefined,
       time: "",
     },
     mode: "onChange",
