@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { LayoutDashboard, FileText, CalendarDays, BarChart3 } from "lucide-react"
+import { FileText, CalendarDays, BarChart3 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface SideNavProps {
@@ -12,13 +12,8 @@ interface SideNavProps {
 
 const sidebarNavItems = [
   {
-    title: "Dashboard",
-    href: "/",
-    icon: LayoutDashboard,
-  },
-  {
     title: "Posts",
-    href: "/posts",
+    href: "/",
     icon: FileText,
   },
   {
@@ -41,7 +36,9 @@ export function SideNav({ isMobile = false }: SideNavProps) {
       <div className="flex h-full flex-col p-4">
         <nav className="grid gap-1 pt-4">
           {sidebarNavItems.map((item, index) => {
-            const isActive = pathname === item.href
+            // Check if we're on the home page or posts page
+            const isActive = pathname === item.href || (item.href === "/" && pathname.startsWith("/posts"))
+
             return (
               <Link key={index} href={item.href} className="flex items-center">
                 <Button
