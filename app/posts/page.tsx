@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,13 +21,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { MoreHorizontal, Plus, Trash2, Calendar, Clock, Edit, Undo, Facebook, Twitter, Instagram, Linkedin } from "lucide-react"
 import { Shell } from "@/components/shell"
 import { usePosts, type Post } from "@/context/post-context"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useToast } from "@/components/ui/use-toast"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { ToastAction } from "@/components/ui/toast"
@@ -35,56 +34,11 @@ import { ToastAction } from "@/components/ui/toast"
 export default function PostsPage() {
   const { posts, deletePost, restorePost } = usePosts()
   const { toast } = useToast()
-  const [searchQuery, setSearchQuery] = useState("")
-  const [currentPage, setCurrentPage] = useState(1)
   const [postToDelete, setPostToDelete] = useState<string | null>(null)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  const postsPerPage = 5
 
   // Check if the screen is mobile
   const isMobile = useMediaQuery("(max-width: 768px)")
-
-  // Filter posts based on search query
-  const filteredPosts = posts.filter((post) => {
-    if (!searchQuery.trim()) return true
-
-    const query = searchQuery.toLowerCase()
-    return (
-      post.title.toLowerCase().includes(query) ||
-      post.platform.toLowerCase().includes(query) ||
-      post.status.toLowerCase().includes(query) ||
-      (post.content && post.content.toLowerCase().includes(query))
-    )
-  })
-
-  // Calculate total pages
-  const totalPages = Math.ceil(filteredPosts.length / postsPerPage)
-
-  // Get current posts for the page
-  const indexOfLastPost = currentPage * postsPerPage
-  const indexOfFirstPost = indexOfLastPost - postsPerPage
-  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost)
-
-  // Reset to first page when search query changes
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [searchQuery])
-
-  // Adjust current page when posts length changes
-  useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(totalPages)
-    }
-  }, [filteredPosts.length, currentPage, totalPages])
-
-  // Handle page navigation
-  const goToNextPage = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-  }
-
-  const goToPrevPage = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 1))
-  }
 
   // Handle post deletion
   const handleDeleteClick = (postId: string) => {
@@ -170,18 +124,6 @@ export default function PostsPage() {
                 <CardDescription>Manage your social media posts across all platforms.</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center justify-between pb-4">
-                  <div className="flex w-full max-w-sm items-center">
-                    <Input
-                      type="search"
-                      placeholder="Search posts..."
-                      className="w-full"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                  </div>
-                </div>
-
                 {/* Desktop Table View */}
                 {!isMobile && (
                   <div className="rounded-md border">
@@ -197,8 +139,8 @@ export default function PostsPage() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {currentPosts.length > 0 ? (
-                          currentPosts.map((post) => (
+                        {posts.length > 0 ? (
+                          posts.map((post) => (
                             <TableRow key={post.id}>
                               <TableCell className="font-medium">{post.title}</TableCell>
                               <TableCell>
@@ -255,7 +197,7 @@ export default function PostsPage() {
                         ) : (
                           <TableRow>
                             <TableCell colSpan={6} className="h-24 text-center">
-                              No posts found matching your search.
+                              No posts found.
                             </TableCell>
                           </TableRow>
                         )}
@@ -267,8 +209,8 @@ export default function PostsPage() {
                 {/* Mobile Card View */}
                 {isMobile && (
                   <div className="space-y-4">
-                    {currentPosts.length > 0 ? (
-                      currentPosts.map((post) => (
+                    {posts.length > 0 ? (
+                      posts.map((post) => (
                         <Card key={post.id} className="overflow-hidden">
                           <div className="p-4">
                             <div className="flex items-center justify-between">
@@ -324,35 +266,11 @@ export default function PostsPage() {
                         </Card>
                       ))
                     ) : (
-                      <div className="py-8 text-center text-muted-foreground">No posts found matching your search.</div>
+                      <div className="py-8 text-center text-muted-foreground">No posts found.</div>
                     )}
                   </div>
                 )}
               </CardContent>
-              <CardFooter className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <p className="text-sm text-muted-foreground order-2 sm:order-1">
-                  {filteredPosts.length > 0
-                    ? `Showing ${indexOfFirstPost + 1}-${Math.min(indexOfLastPost, filteredPosts.length)} of ${filteredPosts.length} posts`
-                    : "No posts found"}
-                </p>
-                <div className="flex items-center space-x-2 order-1 sm:order-2 w-full sm:w-auto justify-center">
-                  <Button type="button" variant="outline" size="sm" onClick={goToPrevPage} disabled={currentPage === 1}>
-                    Previous
-                  </Button>
-                  <span className="text-sm text-muted-foreground px-2">
-                    Page {currentPage} of {totalPages || 1}
-                  </span>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={goToNextPage}
-                    disabled={currentPage === totalPages || totalPages === 0}
-                  >
-                    Next
-                  </Button>
-                </div>
-              </CardFooter>
             </Card>
           </div>
         </main>
