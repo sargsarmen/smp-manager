@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { FileText, CalendarDays, BarChart3 } from "lucide-react"
+import { FileText, BarChart3 } from 'lucide-react'
 import { cn } from "@/lib/utils"
 
 interface SideNavProps {
@@ -15,11 +15,6 @@ const sidebarNavItems = [
     title: "Posts",
     href: "/",
     icon: FileText,
-  },
-  {
-    title: "Schedule",
-    href: "/schedule",
-    icon: CalendarDays,
   },
   {
     title: "Analytics",
@@ -37,7 +32,9 @@ export function SideNav({ isMobile = false }: SideNavProps) {
         <nav className="grid gap-1 pt-4">
           {sidebarNavItems.map((item, index) => {
             // Check if we're on the home page or posts page
-            const isActive = pathname === item.href || (item.href === "/" && pathname.startsWith("/posts"))
+            const isActive =
+              (pathname === item.href) ||
+              (item.href === "/" && pathname.startsWith("/posts"))
 
             return (
               <Link key={index} href={item.href} className="flex items-center">
@@ -61,4 +58,3 @@ export function SideNav({ isMobile = false }: SideNavProps) {
     </div>
   )
 }
-
