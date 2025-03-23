@@ -1,6 +1,6 @@
 "use client"
 
-import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { Line, LineChart, ResponsiveContainer, XAxis, YAxis, Legend, Tooltip } from "recharts"
 
 const data = [
   { name: "Jan", likes: 1500, comments: 500, shares: 300 },
@@ -14,22 +14,65 @@ const data = [
 
 export function EngagementChart() {
   return (
-    <div className="h-[300px]">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
-          <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-          <YAxis
-            stroke="#888888"
-            fontSize={12}
-            tickLine={false}
-            axisLine={false}
-            tickFormatter={(value) => `${value}`}
-          />
-          <Line type="monotone" dataKey="likes" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-          <Line type="monotone" dataKey="comments" stroke="hsl(var(--primary) / 0.7)" strokeWidth={2} dot={false} />
-          <Line type="monotone" dataKey="shares" stroke="hsl(var(--primary) / 0.4)" strokeWidth={2} dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
+    <div className="h-[300px] flex flex-col">
+      <div className="flex-1">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} cy="45%">
+            <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+            <YAxis
+              stroke="#888888"
+              fontSize={12}
+              tickLine={false}
+              axisLine={false}
+              tickFormatter={(value) => `${value}`}
+            />
+            <Tooltip
+              formatter={(value) => [`${value}`, ""]}
+              labelFormatter={(label) => `Month: ${label}`}
+              contentStyle={{
+                borderRadius: "8px",
+                border: "1px solid var(--border)",
+                backgroundColor: "var(--background)",
+              }}
+            />
+            <Legend
+              verticalAlign="bottom"
+              align="center"
+              iconType="circle"
+              formatter={(value) => {
+                return <span className="text-sm capitalize">{value}</span>
+              }}
+            />
+            <Line
+              name="Likes"
+              type="monotone"
+              dataKey="likes"
+              stroke="hsl(var(--primary))"
+              strokeWidth={2}
+              dot={false}
+              activeDot={{ r: 6 }}
+            />
+            <Line
+              name="Comments"
+              type="monotone"
+              dataKey="comments"
+              stroke="hsl(var(--primary) / 0.7)"
+              strokeWidth={2}
+              dot={false}
+              activeDot={{ r: 6 }}
+            />
+            <Line
+              name="Shares"
+              type="monotone"
+              dataKey="shares"
+              stroke="hsl(var(--primary) / 0.4)"
+              strokeWidth={2}
+              dot={false}
+              activeDot={{ r: 6 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   )
 }
