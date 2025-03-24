@@ -62,7 +62,7 @@ export default function AnalyticsPage() {
                   <CardTitle>Engagement Over Time</CardTitle>
                   <CardDescription>Track your engagement metrics across all platforms</CardDescription>
                 </CardHeader>
-                <CardContent className="pl-2">
+                <CardContent className="p-0">
                   <EngagementChart />
                 </CardContent>
               </Card>
@@ -71,7 +71,7 @@ export default function AnalyticsPage() {
                   <CardTitle>Platform Breakdown</CardTitle>
                   <CardDescription>Engagement distribution by platform</CardDescription>
                 </CardHeader>
-                <CardContent className="pb-6">
+                <CardContent className="p-0">
                   <PlatformBreakdown />
                 </CardContent>
               </Card>

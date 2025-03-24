@@ -14,65 +14,62 @@ const data = [
 
 export function EngagementChart() {
   return (
-    <div className="h-[300px] flex flex-col">
-      <div className="flex-1">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} cy="45%">
-            <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-            <YAxis
-              stroke="#888888"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(value) => `${value}`}
-            />
-            <Tooltip
-              formatter={(value) => [`${value}`, ""]}
-              labelFormatter={(label) => `Month: ${label}`}
-              contentStyle={{
-                borderRadius: "8px",
-                border: "1px solid var(--border)",
-                backgroundColor: "var(--background)",
-              }}
-            />
-            <Legend
-              verticalAlign="bottom"
-              align="center"
-              iconType="circle"
-              formatter={(value) => {
-                return <span className="text-sm capitalize">{value}</span>
-              }}
-            />
-            <Line
-              name="Likes"
-              type="monotone"
-              dataKey="likes"
-              stroke="hsl(var(--primary))"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 6 }}
-            />
-            <Line
-              name="Comments"
-              type="monotone"
-              dataKey="comments"
-              stroke="hsl(var(--primary) / 0.7)"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 6 }}
-            />
-            <Line
-              name="Shares"
-              type="monotone"
-              dataKey="shares"
-              stroke="hsl(var(--primary) / 0.4)"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 6 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+    <div className="h-[300px] pr-6 pb-4">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data} cy="45%">
+          <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+          <YAxis
+            stroke="#888888"
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+            tickFormatter={(value) => `${value}`}
+          />
+          <Tooltip
+            contentStyle={{
+              borderRadius: "8px",
+              border: "1px solid var(--border)",
+              backgroundColor: "var(--background)",
+            }}
+          />
+          <Legend
+            verticalAlign="bottom"
+            align="center"
+            iconType="circle"
+            formatter={(value) => {
+              return <span className="text-sm capitalize">{value}</span>
+            }}
+          />
+          <Line
+            name="Likes"
+            type="monotone"
+            dataKey="likes"
+            stroke="hsl(var(--chart-1))"
+            strokeWidth={2}
+            dot={false}
+            activeDot={{ r: 6 }}
+
+          />
+          <Line
+            name="Comments"
+            type="monotone"
+            dataKey="comments"
+            stroke="hsl(var(--chart-2))"
+            strokeWidth={2}
+            dot={false}
+            activeDot={{ r: 6 }}
+          />
+          <Line
+            name="Shares"
+            type="monotone"
+            dataKey="shares"
+            stroke="hsl(var(--chart-3)"
+            strokeWidth={2}
+            dot={false}
+            activeDot={{ r: 6 }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   )
 }
