@@ -24,16 +24,13 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { MoreHorizontal, Plus, Trash2, Calendar, Clock, Edit, Undo, Facebook, Twitter, Instagram, Linkedin } from "lucide-react"
-import { Shell } from "@/components/shell"
 import { usePosts, type Post } from "@/context/post-context"
 import { useState } from "react"
-import { useToast } from "@/components/ui/use-toast"
 import { useMediaQuery } from "@/hooks/use-media-query"
-import { ToastAction } from "@/components/ui/toast"
+import { toast } from "sonner"
 
 export default function PostsPage() {
   const { posts, deletePost, restorePost } = usePosts()
-  const { toast } = useToast()
   const [postToDelete, setPostToDelete] = useState<string | null>(null)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
@@ -56,15 +53,12 @@ export default function PostsPage() {
 
       if (deletedPost) {
         // Show success toast with undo option
-        toast({
-          title: "Post deleted",
+        toast("Post deleted", {
           description: `"${deletedPost.title}" has been deleted.`,
-          action: (
-            <ToastAction altText="Undo" onClick={() => handleUndoDelete(deletedPost, deletedIndex)} className="gap-1">
-              <Undo className="h-4 w-4" />
-              Undo
-            </ToastAction>
-          ),
+          action: {
+            label: "Undo",
+            onClick: () => handleUndoDelete(deletedPost, deletedIndex),
+          }
         })
       }
 
@@ -82,8 +76,7 @@ export default function PostsPage() {
   const handleUndoDelete = (post: Post, deletedIndex?: number) => {
     restorePost(post, deletedIndex)
 
-    toast({
-      title: "Post restored",
+    toast("Post restored", {
       description: `"${post.title}" has been restored.`,
     })
   }
@@ -104,7 +97,7 @@ export default function PostsPage() {
   }
 
   return (
-    <Shell>
+    <>
       <div className="flex min-h-screen w-full flex-col">
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
           <div className="flex items-center justify-between">
@@ -297,7 +290,7 @@ export default function PostsPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </Shell>
+    </>
   )
 }
 
