@@ -104,8 +104,8 @@ type PostContextType = {
   getPost: (id: string) => Post | undefined
   updatePost: (updatedPost: Post) => void
   addPost: (post: Post) => void
-  deletePost: (id: string) => Post | undefined
-  restorePost: (post: Post) => void
+  deletePost: (id: string) => { deletedPost: Post, deletedIndex?: number }
+  restorePost: (post: Post, deletedIndex?: number) => void
 }
 
 // Create the context
@@ -127,24 +127,39 @@ export function PostProvider({ children }: { children: ReactNode }) {
 
   // Add a new post
   const addPost = (post: Post) => {
-    setPosts((prevPosts) => [post, ...prevPosts])
+    setPosts((prevPosts) => [...prevPosts, post])
   }
 
   // Delete a post and return the deleted post for potential restoration
   const deletePost = (id: string) => {
     let deletedPost: Post | undefined
+    let deletedIndex = -1
 
     setPosts((prevPosts) => {
-      deletedPost = prevPosts.find((post) => post.id === id)
+      // Find the post and its index
+      const index = prevPosts.findIndex((post) => post.id === id)
+      if (index !== -1) {
+        deletedPost = prevPosts[index]
+        deletedIndex = index
+      }
+
+      // Remove the post from the array
       return prevPosts.filter((post) => post.id !== id)
     })
-
-    return deletedPost
+    return { deletedPost, deletedIndex }
   }
 
-  // Restore a deleted post
-  const restorePost = (post: Post) => {
-    setPosts((prevPosts) => [post, ...prevPosts])
+  // Restore a deleted post to its original position
+  const restorePost = (post: Post, deletedIndex?: number) => {
+    setPosts((prevPosts) => {
+      if (deletedIndex === undefined) {
+        return [...prevPosts, post]
+      }
+      const newPosts = [...prevPosts]
+      newPosts.splice(deletedIndex, 0, post)
+      return newPosts
+    }
+    )
   }
 
   return (
@@ -162,4 +177,3 @@ export function usePosts() {
   }
   return context
 }
-

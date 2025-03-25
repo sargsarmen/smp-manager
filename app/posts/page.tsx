@@ -52,7 +52,7 @@ export default function PostsPage() {
       setIsDeleteDialogOpen(false)
 
       // Delete the post and get the deleted post for potential restoration
-      const deletedPost = deletePost(postToDelete)
+      const { deletedPost, deletedIndex } = deletePost(postToDelete)
 
       if (deletedPost) {
         // Show success toast with undo option
@@ -60,7 +60,7 @@ export default function PostsPage() {
           title: "Post deleted",
           description: `"${deletedPost.title}" has been deleted.`,
           action: (
-            <ToastAction altText="Undo" onClick={() => handleUndoDelete(deletedPost)} className="gap-1">
+            <ToastAction altText="Undo" onClick={() => handleUndoDelete(deletedPost, deletedIndex)} className="gap-1">
               <Undo className="h-4 w-4" />
               Undo
             </ToastAction>
@@ -79,8 +79,8 @@ export default function PostsPage() {
   }
 
   // Handle undo delete
-  const handleUndoDelete = (post: Post) => {
-    restorePost(post)
+  const handleUndoDelete = (post: Post, deletedIndex?: number) => {
+    restorePost(post, deletedIndex)
 
     toast({
       title: "Post restored",
