@@ -3,11 +3,12 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { FileText, BarChart3 } from 'lucide-react'
+import { FileText, BarChart3 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface SideNavProps {
   isMobile?: boolean
+  onNavigate?: () => void
 }
 
 const sidebarNavItems = [
@@ -23,8 +24,14 @@ const sidebarNavItems = [
   },
 ]
 
-export function SideNav({ isMobile = false }: SideNavProps) {
+export function SideNav({ isMobile = false, onNavigate }: SideNavProps) {
   const pathname = usePathname()
+
+  const handleNavigation = () => {
+    if (isMobile && onNavigate) {
+      onNavigate()
+    }
+  }
 
   return (
     <div className={cn("border-r bg-background", isMobile ? "border-0" : "hidden md:block")}>
@@ -37,7 +44,7 @@ export function SideNav({ isMobile = false }: SideNavProps) {
               (item.href === "/" && pathname.startsWith("/posts"))
 
             return (
-              <Link key={index} href={item.href} className="flex items-center">
+              <Link key={index} href={item.href} className="flex items-center" onClick={handleNavigation}>
                 <Button
                   type="button"
                   variant="ghost"

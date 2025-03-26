@@ -127,7 +127,7 @@ export function PostProvider({ children }: { children: ReactNode }) {
 
   // Add a new post
   const addPost = (post: Post) => {
-    setPosts((prevPosts) => [...prevPosts, post])
+    setPosts((prevPosts) => [post, ...prevPosts])
   }
 
   // Delete a post and return the deleted post for potential restoration
